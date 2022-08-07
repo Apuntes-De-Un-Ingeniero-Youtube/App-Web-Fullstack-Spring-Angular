@@ -7,10 +7,19 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
+/**
+ * Clase abstracta y genérica que implementa la interface IGenericServiceApi
+ * para modificar registros en la base de datos utilizando Data JPa.
+ * 
+ * @author Juan Carlos Estevez Vargas.
+ *
+ * @param <T> Tipo de repositorio a manejar (Appointment, Doctor, Patient).
+ * @param <L> Tipo de dato de la llave primaria del repositorio a manejar.
+ */
 public abstract class GenericServiceApiImpl<T, L extends Serializable> implements IGenericServiceApi<T, L> {
 
 	public abstract CrudRepository<T, L> getRepository();
-	
+
 	@Override
 	public T save(T entity) {
 		return getRepository().save(entity);
