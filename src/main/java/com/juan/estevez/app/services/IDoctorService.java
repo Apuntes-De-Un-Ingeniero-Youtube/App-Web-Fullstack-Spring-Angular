@@ -13,5 +13,5 @@ import com.juan.estevez.app.entities.Doctor;
  *
  */
 public interface IDoctorService extends IGenericServiceApi<Doctor, String>{
-
+	
 }
