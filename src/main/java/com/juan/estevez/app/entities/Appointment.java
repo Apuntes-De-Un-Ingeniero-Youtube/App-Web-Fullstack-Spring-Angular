@@ -5,8 +5,10 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "appointment")
 public class Appointment implements Serializable{
 
 	private static final long serialVersionUID = 1L;

@@ -12,7 +12,7 @@ import java.util.List;
  * @param <T> Tipo de implementación (Appointment, Doctor, Patient).
  * @param <L> Tipo de dato de la llave primaria de ta tabla.
  */
-public interface IGenericServiceApi<T, L extends Serializable> {
+public interface IGenericServiceApi<T, ID extends Serializable> {
 
 	/**
 	 * Se encarga de guardar registros en la base de datos.
@@ -37,7 +37,7 @@ public interface IGenericServiceApi<T, L extends Serializable> {
 	 * 
 	 * @param id Llave primaria por la cual se eliminará el registro.
 	 */
-	void delete(L id);
+	void delete(ID id);
 
 	/**
 	 * Se encarga de obtener registros de la base de datos paramatrizados por un ID
@@ -47,7 +47,7 @@ public interface IGenericServiceApi<T, L extends Serializable> {
 	 * @return Un tipo genérico según el repository obtenido (Patient, Doctor,
 	 *         Appointment).
 	 */
-	T get(L id);
+	T get(ID id);
 
 	/**
 	 * Se encarga de generar un listado de registros obtenidos de la base de datos.

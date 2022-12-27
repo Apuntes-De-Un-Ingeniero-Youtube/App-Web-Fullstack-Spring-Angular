@@ -3,6 +3,7 @@ package com.juan.estevez.app.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,12 +79,18 @@ public class PatientRestController {
 	 * @param idPatient por el cuál se buscará el paciente y en caso de encontrarlo
 	 *                  se eliminará.
 	 * @return paciente eliminado en caso de existir.
+	 */
 	 
 	@DeleteMapping("{idPatient}")
 	public Patient delete(@PathVariable String idPatient) {
 		Patient patient = patientService.get(idPatient);
-		patientService.delete(idPatient);
-		return patient;
-	}*/
+		if (patient != null) {
+			patientService.delete(idPatient);
+			return patient;
+		}
+			return null;
+		
+	}
 
 }
+

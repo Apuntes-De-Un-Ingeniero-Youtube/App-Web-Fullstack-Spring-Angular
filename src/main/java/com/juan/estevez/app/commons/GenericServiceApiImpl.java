@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Service;
 
 /**
  * Clase abstracta y genérica que implementa la interface IGenericServiceApi
@@ -16,9 +17,11 @@ import org.springframework.data.repository.CrudRepository;
  * @param <T> Tipo de repositorio a manejar (Appointment, Doctor, Patient).
  * @param <L> Tipo de dato de la llave primaria del repositorio a manejar.
  */
-public abstract class GenericServiceApiImpl<T, L extends Serializable> implements IGenericServiceApi<T, L> {
+//service
+@Service
+public abstract class GenericServiceApiImpl<T, ID extends Serializable> implements IGenericServiceApi<T, ID> {
 
-	public abstract CrudRepository<T, L> getRepository();
+	public abstract CrudRepository<T, ID> getRepository();
 
 	@Override
 	public T save(T entity) {
@@ -31,7 +34,7 @@ public abstract class GenericServiceApiImpl<T, L extends Serializable> implement
 	}
 
 	@Override
-	public void delete(L id) {
+	public void delete(ID id) {
 		Optional<T> obj = getRepository().findById(id);
 		if (obj.isPresent()) {
 			getRepository().deleteById(id);
@@ -39,7 +42,7 @@ public abstract class GenericServiceApiImpl<T, L extends Serializable> implement
 	}
 
 	@Override
-	public T get(L id) {
+	public T get(ID id) {
 		Optional<T> obj = getRepository().findById(id);
 		if (obj.isPresent()) {
 			return obj.get();

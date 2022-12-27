@@ -5,15 +5,17 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "doctor")
 public class Doctor implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "ID_DOCTOR")
-	private String isDoctor;
+	private String idDoctor;
 	
 	@Column(name = "DOCTORS_NAME")
 	private String doctorsName;
@@ -37,13 +39,11 @@ public class Doctor implements Serializable{
 	private int attentionEndTime;
 
 	public Doctor() {
-
 	}
 
-	public Doctor(String isDoctor, String doctorName, String idType, String numberProfessionalCard, String specialty,
+	public Doctor(String idDoctor, String doctorName, String idType, String numberProfessionalCard, String specialty,
 			int yearsExperience, int attentionStartTime, int attentionEndTime) {
-
-		this.isDoctor = isDoctor;
+		this.idDoctor = idDoctor;
 		this.doctorsName = doctorName;
 		this.idType = idType;
 		this.numberProfessionalCard = numberProfessionalCard;
@@ -54,11 +54,11 @@ public class Doctor implements Serializable{
 	}
 
 	public String getIsDoctor() {
-		return isDoctor;
+		return idDoctor;
 	}
 
-	public void setIsDoctor(String isDoctor) {
-		this.isDoctor = isDoctor;
+	public void setIsDoctor(String idDoctor) {
+		this.idDoctor = idDoctor;
 	}
 
 	public String getDoctorName() {
@@ -119,7 +119,7 @@ public class Doctor implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Doctor [isDoctor=" + isDoctor + ", doctorName=" + doctorsName + ", idType=" + idType
+		return "Doctor [idDoctor=" + idDoctor + ", doctorName=" + doctorsName + ", idType=" + idType
 				+ ", numberProfessionalCard=" + numberProfessionalCard + ", specialty=" + specialty
 				+ ", yearsExperience=" + yearsExperience + ", attentionStartTime=" + attentionStartTime
 				+ ", attentionEndTime=" + attentionEndTime + "]";
@@ -127,7 +127,7 @@ public class Doctor implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(attentionEndTime, attentionStartTime, doctorsName, idType, isDoctor, numberProfessionalCard,
+		return Objects.hash(attentionEndTime, attentionStartTime, doctorsName, idType, idDoctor, numberProfessionalCard,
 				specialty, yearsExperience);
 	}
 
@@ -142,7 +142,7 @@ public class Doctor implements Serializable{
 		Doctor other = (Doctor) obj;
 		return attentionEndTime == other.attentionEndTime && attentionStartTime == other.attentionStartTime
 				&& Objects.equals(doctorsName, other.doctorsName) && Objects.equals(idType, other.idType)
-				&& Objects.equals(isDoctor, other.isDoctor)
+				&& Objects.equals(idDoctor, other.idDoctor)
 				&& Objects.equals(numberProfessionalCard, other.numberProfessionalCard)
 				&& Objects.equals(specialty, other.specialty) && yearsExperience == other.yearsExperience;
 	}
