@@ -2,7 +2,10 @@ package com.juan.estevez.app.controllers;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.juan.estevez.app.dto.PatientDTO;
 import com.juan.estevez.app.entities.Patient;
 import com.juan.estevez.app.services.IPatientService;
 
@@ -25,8 +29,14 @@ import com.juan.estevez.app.services.IPatientService;
 @RequestMapping("/patient")
 public class PatientRestController {
 
-	@Autowired
 	private IPatientService patientService;
+	private ModelMapper modelMapper;
+
+	@Autowired
+	public PatientRestController(IPatientService patientService, ModelMapper modelMapper) {
+		this.patientService = patientService;
+		this.modelMapper = modelMapper;
+	}
 
 	/**
 	 * Se encarga de devolver una lista de los pacientes registrados en el sistema.
@@ -45,8 +55,11 @@ public class PatientRestController {
 	 * @return patiente insertado en el sistema.
 	 */
 	@PostMapping
-	public Patient save(@RequestBody Patient patient) {
-		return patientService.save(patient);
+	public ResponseEntity<PatientDTO> save(@RequestBody PatientDTO patientDto) {
+		return new ResponseEntity<>(
+				modelMapper.map(
+						patientService.save(modelMapper.map(patientDto, Patient.class)), PatientDTO.class), 
+				HttpStatus.OK);
 	}
 
 	/**
@@ -56,8 +69,11 @@ public class PatientRestController {
 	 * @return patiente actualizado en el sistema.
 	 */
 	@PutMapping
-	public Patient update(@RequestBody Patient patient) {
-		return patientService.update(patient);
+	public ResponseEntity<PatientDTO> update(@RequestBody PatientDTO patientDto) {
+		return new ResponseEntity<>(
+				modelMapper.map(
+						patientService.update(modelMapper.map(patientDto, Patient.class)), PatientDTO.class), 
+				HttpStatus.OK);
 	}
 
 	/**
@@ -68,8 +84,10 @@ public class PatientRestController {
 	 * @return Paciente encontrado o null en caso de no encontrarlo.
 	 */
 	@GetMapping("/findById/{idPatient}")
-	public Patient searchPatient(@PathVariable String idPatient) {
-		return patientService.get(idPatient);
+	public PatientDTO searchPatient(@PathVariable String idPatient) {
+		// Aca no devolvemos ninguna entidad de respuesta porque solo estamps consultando datos
+		// Para ello solamente debemos mapear la consulta a un objeto DTO y listo.
+		return modelMapper.map(patientService.get(idPatient), PatientDTO.class);
 	}
 
 	/**
@@ -80,17 +98,19 @@ public class PatientRestController {
 	 *                  se eliminará.
 	 * @return paciente eliminado en caso de existir.
 	 */
-	 
+
 	@DeleteMapping("{idPatient}")
-	public Patient delete(@PathVariable String idPatient) {
-		Patient patient = patientService.get(idPatient);
+	public ResponseEntity<PatientDTO> delete(@PathVariable String idPatient) {
+		// Aca si debemos buscar primero el paciente pero mapeandolo para luego eliminarlo y devolverlo
+		PatientDTO patient = modelMapper.map(patientService.get(idPatient), PatientDTO.class);
+
+		// Devolvemos el paciente DTO.
 		if (patient != null) {
 			patientService.delete(idPatient);
-			return patient;
+			return new ResponseEntity<>(patient, HttpStatus.OK);
 		}
-			return null;
-		
+		return null;
+
 	}
 
 }
-
