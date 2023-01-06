@@ -47,12 +47,7 @@ public class DoctorDataJPAIT {
 		assertThat(!responseDatabase.isEmpty());
 		
 		//assertEquals(1, responseDatabase.get(0).values());
-		
-		SqlRowSet response2 = jdbcTemplate.queryForRowSet("SELECT * FROM DOCTOR WHERE ID_DOCTOR = ?", response.getBody().getIdDoctor());
-
-		assertThat(response2.getRow()).isNotNegative().isNotNull();
-		assertEquals(createDoctor().getIdDoctor(), response2.getInt("id_doctor"));//- --- ---	*/	
-		assertEquals(response.getBody().getIdDoctor(), response2.getInt("id_doctor"));
+	
 
 		/* Validando que el id del doctor no sea nulo y que la respuesta de la base de datos 
 		 * coincida con el valor esperado. */
@@ -82,6 +77,47 @@ public class DoctorDataJPAIT {
 		assertEquals(createDoctor().getAttentionEndTime(), response.getBody().getAttentionEndTime());
 	}
 
+	
+	@Test
+	@Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "insertDoctorToUpdate.sql")
+	@Sql(executionPhase = ExecutionPhase.AFTER_TEST_METHOD, scripts = "cleanDoctorToupdate.sql")
+	void putDoctor() {
+		HttpEntity<Doctor> request = new HttpEntity<>(updateDoctor());
+		ResponseEntity<Doctor> response = testRestTemplate.exchange("http://localhost:8080/doctor", HttpMethod.PUT,
+				request, Doctor.class);
+		
+		List<Map<String, Object>> responseDatabase = jdbcTemplate.queryForList("SELECT * FROM DOCTOR WHERE ID_DOCTOR = ?",
+				response.getBody().getIdDoctor());
+		
+		assertThat(response.getBody().getIdDoctor()).isNotNull();
+		assertThat(responseDatabase.get(0)).isNotEmpty().isNotNull();
+		assertEquals(updateDoctor().getIdDoctor(), response.getBody().getIdDoctor());
+		assertEquals(response.getBody().getIdDoctor(), responseDatabase.get(0).get("ID_DOCTOR"));
+
+		assertThat(response.getBody().getDoctorsName()).isNotEmpty();
+		assertEquals(updateDoctor().getDoctorsName(), response.getBody().getDoctorsName());
+		assertEquals(response.getBody().getDoctorsName(), responseDatabase.get(0).get("DOCTORS_NAME"));
+
+		assertThat(response.getBody().getIdType()).isNotEmpty();
+		assertEquals(updateDoctor().getIdType(), response.getBody().getIdType());
+
+		assertThat(response.getBody().getNumberProfessionalCard()).isNotEmpty();
+		assertEquals(updateDoctor().getNumberProfessionalCard(), response.getBody().getNumberProfessionalCard());
+
+		assertThat(response.getBody().getYearsExperience()).isNotNegative();
+		assertEquals(updateDoctor().getYearsExperience(), response.getBody().getYearsExperience());
+
+		assertThat(response.getBody().getSpecialty()).isNotEmpty();
+		assertEquals(updateDoctor().getSpecialty(), response.getBody().getSpecialty());
+
+		assertThat(response.getBody().getAttentionStartTime()).isNotNegative();
+		assertEquals(updateDoctor().getAttentionStartTime(), response.getBody().getAttentionStartTime());
+
+		assertThat(response.getBody().getAttentionEndTime()).isNotNegative();
+		assertEquals(updateDoctor().getAttentionEndTime(), response.getBody().getAttentionEndTime());
+		
+	}
+
 
 	private Doctor createDoctor() {
 		Doctor doctor = new Doctor();
@@ -90,6 +126,19 @@ public class DoctorDataJPAIT {
 		doctor.setIdType("CC");
 		doctor.setNumberProfessionalCard("1111");
 		doctor.setYearsExperience(10);
+		doctor.setSpecialty("Cardiología");
+		doctor.setAttentionStartTime(8);
+		doctor.setAttentionEndTime(16);
+		return doctor;
+	}
+	
+	private Doctor updateDoctor() {
+		Doctor doctor = new Doctor();
+		doctor.setIdDoctor("101010");
+		doctor.setDoctorsName("Doctor Update Test");
+		doctor.setIdType("CC");
+		doctor.setNumberProfessionalCard("1111");
+		doctor.setYearsExperience(4);
 		doctor.setSpecialty("Cardiología");
 		doctor.setAttentionStartTime(8);
 		doctor.setAttentionEndTime(16);
