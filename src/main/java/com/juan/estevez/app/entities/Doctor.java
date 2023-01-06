@@ -35,9 +35,9 @@ public class Doctor implements Serializable{
 	private int yearsExperience;
 	
 	@Column(name = "ATTENTION_START_TIME")
-	private int attentionStartTime;
+	private Double attentionStartTime;
 	
 	@Column(name = "ATTENTION_END_TIME")
-	private int attentionEndTime;
+	private Double attentionEndTime;
 
 }
