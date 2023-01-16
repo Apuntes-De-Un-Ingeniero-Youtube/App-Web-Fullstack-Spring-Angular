@@ -101,7 +101,6 @@ public class PatientRestController {
 
 	@DeleteMapping("{idPatient}")
 	public ResponseEntity<PatientDTO> delete(@PathVariable String idPatient) {
-		// Aca si debemos buscar primero el paciente pero mapeandolo para luego eliminarlo y devolverlo
 		PatientDTO patient = modelMapper.map(patientService.get(idPatient), PatientDTO.class);
 
 		// Devolvemos el paciente DTO.
