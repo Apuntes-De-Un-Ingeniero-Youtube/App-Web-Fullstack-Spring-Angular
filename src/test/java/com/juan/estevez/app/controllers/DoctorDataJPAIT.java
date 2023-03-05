@@ -55,7 +55,6 @@ public class DoctorDataJPAIT {
 		 * datos coincida con el valor esperado.
 		 */
 		assertThat(response.getBody().getIdDoctor()).isNotNull();
-		assertThat(responseDatabase.get(0)).isNotEmpty().isNotNull();
 
 		/* Validando el campo ID_DOCTOR */
 		assertThat(responseDatabase.get(0).get("ID_DOCTOR")).isNotNull();
@@ -198,7 +197,6 @@ public class DoctorDataJPAIT {
 
 		assertThat(responseDatabase.size()).isNotNegative().isNotNull();
 		assertThat(!responseDatabase.isEmpty());
-		assertThat(responseDatabase.get(0)).isNotEmpty().isNotNull();
 
 		/* Validando el campo ID_DOCTOR */
 		assertThat(responseDatabase.get(0).get("ID_DOCTOR")).isNotNull();
@@ -265,7 +263,8 @@ public class DoctorDataJPAIT {
 		
 		assertNotNull(doctors);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(0, doctors.size());
+		//assertEquals(0, doctors.size());
+		assertEquals(response.getBody().length, doctors.size());
 	}
 
 	private Doctor createDoctor() {

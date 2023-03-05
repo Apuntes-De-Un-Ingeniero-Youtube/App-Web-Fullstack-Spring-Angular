@@ -99,7 +99,7 @@ public class PatientRestController {
 	 * @return paciente eliminado en caso de existir.
 	 */
 
-	@DeleteMapping("{idPatient}")
+	@DeleteMapping("/{idPatient}")
 	public ResponseEntity<PatientDTO> delete(@PathVariable String idPatient) {
 		PatientDTO patient = modelMapper.map(patientService.get(idPatient), PatientDTO.class);
 
